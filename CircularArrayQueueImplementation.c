@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #define n 10
 
 /* diferença: em vez de i++, para uma array circular, i=(i+1)%n;
@@ -14,11 +15,11 @@ typedef struct Queue {
 	int front, rear;
 } Queue;
 
-Queue startQueue() {
-	Queue Q;
-	Q.front=-1;
-	Q.rear=-1;
-	return Q;
+Queue* startQueue() {
+	Queue* p_queue = (Queue*)malloc(sizeof(Queue));
+	p_queue->front=-1;
+	p_queue->rear=-1;
+	return p_queue;
 }
 
 bool isQueueEmpty(Queue* queue) {
@@ -27,36 +28,37 @@ bool isQueueEmpty(Queue* queue) {
 }
 
 bool isQueueFull(Queue* queue) {
-	if ((queue->rear+1)%n != queue->front) return false;
-	else return true;
+	if ((queue->rear+1)%n == queue->front) return true;
+	else return false;
 }
 
-void enqueue(int x,Queue* queue) {
+int enqueue(int x,Queue* queue) {
 	if (isQueueEmpty(queue)) {
 		queue->array[++queue->front]=x;
 		queue->rear++;
+		return 0;
 	} else if (isQueueFull(queue)) {
-		throwError();
-		return;
-	} else {
-		queue->rear=(queue->rear+1)%n;
-		queue->array[queue->rear]=x;
+		fprintf(stderr,"Queue is full\n");
+		return -1;
 	}
+	queue->rear=(queue->rear+1)%n;
+	queue->array[queue->rear]=x;
+	return 0;
 }
 
-int dequeue(Queue* queue) {
-	int pop;
+int dequeue(Queue* queue,int* p_poppedValue) {
 	if (isQueueEmpty(queue)) {
-		pop = throwError();
-	} else if (queue->front == queue->rear){ // se houver apenas um elemento na fila
-		pop = queue->array[queue->front];
+		fprintf(stderr,"Could not pop value: queue is empty\n");
+		return -1;
+	} else *p_poppedValue = queue->array[queue->front];
+	
+	if (queue->front == queue->rear){ // se houver apenas um elemento na fila
 		queue->front=-1;
 		queue->rear=-1;
 	} else {
-		pop = queue->array[queue->front];
 		queue->front=(queue->front+1)%n;
 	}
-	return pop;
+	return 0;
 }
 
 void printQueue(Queue* queue) {
@@ -71,25 +73,31 @@ void printQueue(Queue* queue) {
 
 int main() {
 	
-	Queue fila = startQueue();
-	
-	char c; int x;
-	do {
-		printf("Entre com 'e' para adicionar um número na fila, 'd' para retirar um número da fila ou outra tecla para encerrar o programa: ");
-		scanf(" %c",&c);
-		if (c == 'e') {
-			printf("Entre com o valor a ser inserido na fila: ");
-			scanf("%d",&x);
-			enqueue(x,&fila);
-			printQueue(&fila);
-		} else if (c == 'd') {
-			printf("%d\n",dequeue(&fila));
-			printQueue(&fila);
-		} else {
-			c = '\0';
-		}
-	} while ( c != '\0');
-	
+	Queue* p_fila = startQueue();
+	int poppedValue;
+
+	enqueue(1,p_fila);
+	enqueue(2,p_fila);
+	enqueue(3,p_fila);
+	enqueue(4,p_fila);
+	enqueue(5,p_fila);
+	printQueue(p_fila);
+	if (!dequeue(p_fila,&poppedValue)) printf("%d \n",poppedValue);
+	printQueue(p_fila);
+	enqueue(6,p_fila);
+	enqueue(7,p_fila);
+	enqueue(8,p_fila);
+	enqueue(9,p_fila);
+	enqueue(10,p_fila);
+	enqueue(11,p_fila);
+	printQueue(p_fila);
+	enqueue(12,p_fila);
+	printQueue(p_fila);
+	if (!dequeue(p_fila,&poppedValue)) printf("%d \n",poppedValue);
+	printQueue(p_fila);
+	enqueue(12,p_fila);
+	printQueue(p_fila);
+
 	return 0;	
 }
 
