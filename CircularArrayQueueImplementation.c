@@ -1,20 +1,23 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#define n 10
+// #define n 10
 
 /* diferença: em vez de i++, para uma array circular, i=(i+1)%n;
  * em vez de i--, para uma array circular, i=(i+n-1)%n --. Esse, no entanto não, foi usado aqui. */
 
 typedef struct Queue {
-	int array[n];
+	int* array;
+	int arraySize;
 	int front, rear;
 } Queue;
 
-Queue* startQueue() {
+Queue* startQueue(int n) {
 	Queue* p_queue = (Queue*)malloc(sizeof(Queue));
 	p_queue->front=-1;
 	p_queue->rear=-1;
+	p_queue->array=(int*)malloc(n*sizeof(int));
+	p_queue->arraySize = n;
 	return p_queue;
 }
 
@@ -24,7 +27,7 @@ bool isQueueEmpty(Queue* queue) {
 }
 
 bool isQueueFull(Queue* queue) {
-	if ((queue->rear+1)%n == queue->front) return true;
+	if ((queue->rear+1)%(queue->arraySize) == queue->front) return true;
 	else return false;
 }
 
@@ -37,7 +40,7 @@ int enqueue(int x,Queue* queue) {
 		fprintf(stderr,"Queue is full\n");
 		return -1;
 	}
-	queue->rear=(queue->rear+1)%n;
+	queue->rear=(queue->rear+1)%(queue->arraySize);
 	queue->array[queue->rear]=x;
 	return 0;
 }
@@ -53,7 +56,7 @@ int dequeue(Queue* queue,int* p_poppedValue) {
 		queue->rear=-1;
 		return -1;
 	} else {
-		queue->front=(queue->front+1)%n;
+		queue->front=(queue->front+1)%(queue->arraySize);
 		return 1;
 	}
 	// function returns 0 when fails (queue is empty), -1 when the popped element was the last one in the queue, 1 when not
@@ -62,13 +65,14 @@ int dequeue(Queue* queue,int* p_poppedValue) {
 void endQueue(Queue* p_queue) {
 	int poppedValue;
 	while(dequeue(p_queue,&poppedValue) != -1); // this will dequeue while there are still elements
+	free(p_queue->array);
 	free(p_queue);
 }
 
 void printQueue(Queue* queue) {
 	if (isQueueEmpty(queue)) return;
 	int i;
-	for (i=queue->front; i!=queue->rear; i=(i+1)%n) {
+	for (i=queue->front; i!=queue->rear; i=(i+1)%(queue->arraySize)) {
 		printf("%d ",queue->array[i]);
 	}
 	printf("%d",queue->array[i]);
@@ -77,7 +81,7 @@ void printQueue(Queue* queue) {
 
 int main() {
 	
-	Queue* p_fila = startQueue();
+	Queue* p_fila = startQueue(10);
 	int poppedValue;
 
 	enqueue(1,p_fila);
