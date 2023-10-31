@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-// #define n 10
 
-/* diferença: em vez de i++, para uma array circular, i=(i+1)%n;
- * em vez de i--, para uma array circular, i=(i+n-1)%n --. Esse, no entanto não, foi usado aqui. */
+/* diferença: em vez de i++, para uma array circular, i=(i+1)%arraySize;
+ * em vez de i--, para uma array circular, i=(i+arraySize-1)%arraySize --. Esse, no entanto não, foi usado aqui. */
 
 typedef struct Queue {
 	int* array;
@@ -12,12 +11,12 @@ typedef struct Queue {
 	int front, rear;
 } Queue;
 
-Queue* startQueue(int n) {
+Queue* startQueue(int items) {
 	Queue* p_queue = (Queue*)malloc(sizeof(Queue));
 	p_queue->front=-1;
 	p_queue->rear=-1;
-	p_queue->array=(int*)malloc(n*sizeof(int));
-	p_queue->arraySize = n;
+	p_queue->array=(int*)malloc(items*sizeof(int));
+	p_queue->arraySize = items;
 	return p_queue;
 }
 
