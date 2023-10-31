@@ -1,26 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct sNode {
+typedef struct stackNode {
 	int data;
-	struct sNode* next;
-} sNode;
+	struct stackNode* next;
+} stackNode;
 
-void Push(int x,sNode** pTop) {
-	sNode* var = (sNode*)malloc(sizeof(sNode));
-	var->data = x;
-	var->next = *pTop;
-	*pTop = var;
+void Push(int x,stackNode** pTop) {
+	stackNode* newNode = (stackNode*)malloc(sizeof(stackNode));
+	newNode->data = x;
+	newNode->next = *pTop;
+	*pTop = newNode;
 }
 
-void Pop(sNode** pTop) {
+void Pop(stackNode** pTop) {
 	if (*pTop == NULL) return;
-	sNode* temp = *pTop;
+	stackNode* temp = *pTop;
 	*pTop = temp->next;
 	free(temp);
 }
 
-void Print(sNode* top) {
+void Print(stackNode* top) {
 	while(top != NULL) {
 		printf("%d ",top->data);
 		top=top->next;
@@ -29,7 +29,7 @@ void Print(sNode* top) {
 }
 
 int main() {
-	sNode* top = NULL;
+	stackNode* top = NULL;
 	Push(1,&top);
 	Push(2,&top);
 	Push(3,&top);
