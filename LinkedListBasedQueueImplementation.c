@@ -2,18 +2,14 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-int throwError() {
-	printf("NO CAN DO.\n"); return -1;
-}
-
-typedef struct qNode {
+typedef struct queueNode {
 	int data;
-	struct qNode* next;
-} qNode;
+	struct queueNode* next;
+} queueNode;
 
 typedef struct Queue {
-	qNode* front;
-	qNode* rear;
+	queueNode* front;
+	queueNode* rear;
 } Queue;
 
 bool isQueueEmpty(Queue* queue) {
@@ -29,7 +25,7 @@ Queue* startQueue() {
 }
 
 void enqueue(int x, Queue* queue) {
-	qNode* var = (qNode*)malloc(sizeof(qNode));
+	queueNode* var = (queueNode*)malloc(sizeof(queueNode));
 	var->data = x;
 	var->next = NULL;
 	if (queue->front == NULL) {
@@ -51,7 +47,7 @@ int dequeue(Queue* queue, int** p_p_poppedValue) {
         return -1;
     }
 
-	qNode* p_qNode = queue->front;
+	queueNode* p_queueNode = queue->front;
 	
 	int* p_poppedValue = (int*)malloc(sizeof(int));
 	*p_poppedValue = (queue->front)->data;
@@ -62,15 +58,15 @@ int dequeue(Queue* queue, int** p_p_poppedValue) {
 
 	queue->front = (queue->front)->next;
 	if (queue->front == NULL) queue->rear=NULL; // se o elemento tiver sido o último da lista, ajustar o queue->rear
-	free(p_qNode);
+	free(p_queueNode);
 	return 0;
 }
 
 void printQueue(Queue* queue) {
-	qNode* p_qNode = queue->front;
-	while(p_qNode != NULL) {
-		printf("%d ",p_qNode->data);
-		p_qNode=(p_qNode)->next;
+	queueNode* p_queueNode = queue->front;
+	while(p_queueNode != NULL) {
+		printf("%d ",p_queueNode->data);
+		p_queueNode=(p_queueNode)->next;
 	}
 	printf("\n");
 }
