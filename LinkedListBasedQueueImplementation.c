@@ -37,31 +37,6 @@ void enqueue(int x, Queue* queue) {
 	queue->rear=var;
 }
 
-int dequeued(Queue* queue, int** p_p_poppedValue) {
-
-	if (queue->front == NULL) {
-        fprintf(stderr, "Queue is empty\n");
-		// free the address of a possible previously popped number before assignin NULL to the pointer 
-		if (*p_p_poppedValue != NULL) free(*p_p_poppedValue);
-		*p_p_poppedValue = NULL;
-        return -1;
-    }
-
-	queueNode* p_queueNode = queue->front;
-	
-	int* p_poppedValue = (int*)malloc(sizeof(int));
-	*p_poppedValue = (queue->front)->data;
-	//the pointer might not be null, so before assigning a new address to the next popped value we must check and free the previous if needed
-	if (*p_p_poppedValue != NULL) free(*p_p_poppedValue);
-	free(*p_p_poppedValue);
-	*p_p_poppedValue = p_poppedValue;
-
-	queue->front = (queue->front)->next;
-	if (queue->front == NULL) queue->rear=NULL; // se o elemento tiver sido o último da lista, ajustar o queue->rear
-	free(p_queueNode);
-	return 0;
-}
-
 int dequeue(Queue* queue, int* p_poppedValue) {
 
 	if (queue->front == NULL) {
