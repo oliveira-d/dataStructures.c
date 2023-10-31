@@ -41,16 +41,28 @@ int dequeue(Queue* queue, int* p_poppedValue) {
 
 	if (queue->front == NULL) {
         fprintf(stderr, "Queue is empty\n");
-		return -1;
+		return 0;
     }
 
 	*p_poppedValue = (queue->front)->data;
 	
 	queueNode* p_queueNode = queue->front;
 	queue->front = (queue->front)->next; //change the current front element of the queue
-	if (queue->front == NULL) queue->rear=NULL; // se o elemento tiver sido o último da lista, ajustar o queue->rear
-	free(p_queueNode); // free previous queue front element
-	return 0;
+	free(p_queueNode); //free previous front node
+	
+	if (queue->front == NULL) {
+		queue->rear=NULL; // se o elemento tiver sido o último da lista, ajustar o queue->rear		
+		return -1;
+	} else {
+		return 1;
+	}
+	// function returns 0 when failed (empty queue), -1 when last element was popped and 1 otherwise
+}
+
+void endQueue(Queue* p_queue) {
+	int poppedValue;
+	while(dequeue(p_queue,&poppedValue) != -1);
+	free(p_queue);
 }
 
 void printQueue(Queue* queue) {
@@ -67,16 +79,17 @@ int main() {
 	Queue* p_fila = startQueue();
 	int poppedValue;
 	
-	if (!dequeue(p_fila,&poppedValue)) printf("Popped value is %d \n",poppedValue);
+	if (dequeue(p_fila,&poppedValue)) printf("Popped value is %d \n",poppedValue);
 	enqueue(1,p_fila);	
 	enqueue(2,p_fila);	
 	enqueue(3,p_fila);	
 	enqueue(4,p_fila);
 	printQueue(p_fila);	
-	if (!dequeue(p_fila,&poppedValue)) printf("Popped value is %d \n",poppedValue);
+	if (dequeue(p_fila,&poppedValue)) printf("Popped value is %d \n",poppedValue);
 	printQueue(p_fila);
 	enqueue(5,p_fila);
 	printQueue(p_fila);
 
+	endQueue(p_fila);
 	return 0;
 }

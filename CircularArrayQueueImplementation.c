@@ -6,10 +6,6 @@
 /* diferença: em vez de i++, para uma array circular, i=(i+1)%n;
  * em vez de i--, para uma array circular, i=(i+n-1)%n --. Esse, no entanto não, foi usado aqui. */
 
-int throwError() {
-	printf("NO CAN DO.\n"); return -1;
-}
-
 typedef struct Queue {
 	int array[n];
 	int front, rear;
@@ -49,16 +45,24 @@ int enqueue(int x,Queue* queue) {
 int dequeue(Queue* queue,int* p_poppedValue) {
 	if (isQueueEmpty(queue)) {
 		fprintf(stderr,"Could not pop value: queue is empty\n");
-		return -1;
+		return 0;
 	} else *p_poppedValue = queue->array[queue->front];
 	
 	if (queue->front == queue->rear){ // se houver apenas um elemento na fila
 		queue->front=-1;
 		queue->rear=-1;
+		return -1;
 	} else {
 		queue->front=(queue->front+1)%n;
+		return 1;
 	}
-	return 0;
+	// function returns 0 when fails (queue is empty), -1 when the popped element was the last one in the queue, 1 when not
+}
+
+void endQueue(Queue* p_queue) {
+	int poppedValue;
+	while(dequeue(p_queue,&poppedValue) != -1); // this will dequeue while there are still elements
+	free(p_queue);
 }
 
 void printQueue(Queue* queue) {
@@ -97,6 +101,8 @@ int main() {
 	printQueue(p_fila);
 	enqueue(12,p_fila);
 	printQueue(p_fila);
+
+	endQueue(p_fila);
 
 	return 0;	
 }
