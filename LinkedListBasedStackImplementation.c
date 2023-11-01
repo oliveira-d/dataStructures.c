@@ -6,14 +6,14 @@ typedef struct stackNode {
 	struct stackNode* next;
 } stackNode;
 
-void Push(int x,stackNode** pTop) {
+void push(int x,stackNode** pTop) {
 	stackNode* newNode = (stackNode*)malloc(sizeof(stackNode));
 	newNode->data = x;
 	newNode->next = *pTop;
 	*pTop = newNode;
 }
 
-void Pop(stackNode** pTop) {
+void pop(stackNode** pTop) {
 	if (*pTop == NULL) return;
 	stackNode* temp = *pTop;
 	*pTop = temp->next;
@@ -30,18 +30,18 @@ void Print(stackNode* top) {
 
 int main() {
 	stackNode* top = NULL;
-	Push(1,&top);
-	Push(2,&top);
-	Push(3,&top);
-	Push(4,&top);
+	push(1,&top);
+	push(2,&top);
+	push(3,&top);
+	push(4,&top);
 	
 	Print(top);
 	
-	Pop(&top);
+	pop(&top);
 	
 	Print(top);
 	
-	Push(5,&top);
+	push(5,&top);
 	
 	Print(top);
 	
