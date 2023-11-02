@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "LinkedListBasedQueue.h"
 
 // Binary Search Tree implementation
 
@@ -10,22 +11,23 @@ typedef struct bNode {
 	struct bNode* right;
 } bNode;
 
-bool isTreeEmpty(bNode* root) {
-	if (root == NULL) return true;
+bool isTreeEmpty(bNode* p_root) {
+	if (p_root == NULL) return true;
 	return false;
 }
 
-int treeHeight(bNode* root) {
-	if (root == NULL) return -1;
+int treeHeight(bNode* p_root) {
+	if (p_root == NULL) return -1;
 	
-	int leftHeight = treeHeight(root->left);
-	int rightHeight = treeHeight(root->right);
+	int leftHeight = treeHeight(p_root->left);
+	int rightHeight = treeHeight(p_root->right);
 	
 	if (leftHeight > rightHeight) return leftHeight + 1;
 	else return rightHeight + 1;
 }
 
 // start circular array based queue implementation (dependency for LevelOrder() function in BST implementation)
+/*
 #define n 20
 
 typedef struct Queue {
@@ -83,65 +85,65 @@ bNode* dequeue(Queue* queue) {
 	}
 	return pop;
 }
-
+*/
 // end of queue implementation
 
 // Search
 
-bNode* treeMin(bNode* root) {
-	if (isTreeEmpty(root)) {
+bNode* treeMin(bNode* p_root) {
+	if (isTreeEmpty(p_root)) {
 		printf("Error: tree is empty!");
 		return NULL;
-	} else if (root->left == NULL) {
-		return root;
-	} else return treeMin(root->left);
+	} else if (p_root->left == NULL) {
+		return p_root;
+	} else return treeMin(p_root->left);
 }
 
-bNode* treeMax(bNode* root) {
-	if (isTreeEmpty(root)) {
+bNode* treeMax(bNode* p_root) {
+	if (isTreeEmpty(p_root)) {
 		printf("Error: tree is empty!");
 		return NULL;
-	} else if (root->right == NULL) {
-		return root;
-	} else return treeMin(root->right);
+	} else if (p_root->right == NULL) {
+		return p_root;
+	} else return treeMin(p_root->right);
 }
 
-bool treeHas(int x,bNode* root) {
-	if (root == NULL) return false;
-	else if (x == root->data) return true;
-	else if (x < root->data) return treeHas(x,root->left);
-	else return treeHas(x,root->right);
+bool treeHas(int x,bNode* p_root) {
+	if (p_root == NULL) return false;
+	else if (x == p_root->data) return true;
+	else if (x < p_root->data) return treeHas(x,p_root->left);
+	else return treeHas(x,p_root->right);
 }
 
 // insertion with Recursion
-bNode* insertTreeR(int x, bNode** pRoot) {
-		if (*pRoot == NULL) {
-			(*pRoot) = (bNode*)malloc(sizeof(bNode));
-			(*pRoot)->data = x;
-			(*pRoot)->left = NULL;
-			(*pRoot)->right = NULL;
-		} else if (x <= (*pRoot)->data) {
-			(*pRoot)->left = insertTreeR(x,&(*pRoot)->left);
+bNode* insertTreeR(int x, bNode** p_p_root) {
+		if (*p_p_root == NULL) {
+			(*p_p_root) = (bNode*)malloc(sizeof(bNode));
+			(*p_p_root)->data = x;
+			(*p_p_root)->left = NULL;
+			(*p_p_root)->right = NULL;
+		} else if (x <= (*p_p_root)->data) {
+			(*p_p_root)->left = insertTreeR(x,&(*p_p_root)->left);
 		} else {
-			(*pRoot)->right = insertTreeR(x,&(*pRoot)->right);
+			(*p_p_root)->right = insertTreeR(x,&(*p_p_root)->right);
 		}
-		return *pRoot;
+		return *p_p_root;
 }
 
 // insertion with While Loop
-void insertTreeL(int x, bNode** pRoot) {
+void insertTreeL(int x, bNode** p_p_root) {
 	
 	bNode* var = (bNode*)malloc(sizeof(bNode));
 	var->left = NULL;
 	var->right = NULL;
 	var->data = x;
 	
-	if (*pRoot == NULL) {
-		*pRoot = var;
+	if (*p_p_root == NULL) {
+		*p_p_root = var;
 		return;
 	}
 	
-	bNode* temp = *pRoot;
+	bNode* temp = *p_p_root;
 	
 	while(temp->left != var && temp->right != var) {
 		
@@ -154,70 +156,75 @@ void insertTreeL(int x, bNode** pRoot) {
 	}
 }
 
-bNode* deleteTree(int x, bNode** pRoot) {
-	if (*pRoot == NULL) return NULL;
-	else if (x < (*pRoot)->data) (*pRoot)->left = deleteTree(x,&(*pRoot)->left);
-	else if (x > (*pRoot)->data) (*pRoot)->right = deleteTree(x,&(*pRoot)->right);
+bNode* deleteTree(int x, bNode** p_p_root) {
+	if (*p_p_root == NULL) return NULL;
+	else if (x < (*p_p_root)->data) (*p_p_root)->left = deleteTree(x,&(*p_p_root)->left);
+	else if (x > (*p_p_root)->data) (*p_p_root)->right = deleteTree(x,&(*p_p_root)->right);
 	else {
-		if ((*pRoot)->left == NULL && (*pRoot)->right == NULL) {
-			free(*pRoot);
-			*pRoot = NULL;
-		} else if ((*pRoot)->left == NULL) {
-			bNode* temp = (*pRoot);
-			*pRoot = (*pRoot)->right;
+		if ((*p_p_root)->left == NULL && (*p_p_root)->right == NULL) {
+			free(*p_p_root);
+			*p_p_root = NULL;
+		} else if ((*p_p_root)->left == NULL) {
+			bNode* temp = (*p_p_root);
+			*p_p_root = (*p_p_root)->right;
 			free(temp);
-		} else if ((*pRoot)->right == NULL) {
-			bNode* temp = (*pRoot);
-			*pRoot = (*pRoot)->left;
+		} else if ((*p_p_root)->right == NULL) {
+			bNode* temp = (*p_p_root);
+			*p_p_root = (*p_p_root)->left;
 			free(temp);
 		} else {
-			bNode* temp = treeMin((*pRoot)->right);
-			(*pRoot)->data = temp->data;
-			(*pRoot)->right = deleteTree(temp->data,&(*pRoot)->right);
+			bNode* temp = treeMin((*p_p_root)->right);
+			(*p_p_root)->data = temp->data;
+			(*p_p_root)->right = deleteTree(temp->data,&(*p_p_root)->right);
 		}
 	}
-	return *pRoot;
+	return *p_p_root;
 }
 
 // Depth-first traversal: 
-void PreOrder(bNode* root){
-	if(root != NULL) {
-		printf("%p %p %d %p\n",root,root->left,root->data,root->right);
-		PreOrder(root->left);
-		PreOrder(root->right);
+void PreOrder(bNode* p_root){
+	if(p_root != NULL) {
+		printf("%p %p %d %p\n",p_root,p_root->left,p_root->data,p_root->right);
+		PreOrder(p_root->left);
+		PreOrder(p_root->right);
 	}
 }
 
-void InOrder(bNode* root){
-	if(root != NULL) {
-		InOrder(root->left);
-		printf("%p - %p %d %p\n",root,root->left,root->data,root->right);
-		InOrder(root->right);
+void InOrder(bNode* p_root){
+	if(p_root != NULL) {
+		InOrder(p_root->left);
+		printf("%p - %p %d %p\n",p_root,p_root->left,p_root->data,p_root->right);
+		InOrder(p_root->right);
 	}
 }
 
-void PostOrder(bNode* root){
-	if(root != NULL) {
-		PostOrder(root->left);
-		PostOrder(root->right);
-		printf("%p - %p %d %p\n",root,root->left,root->data,root->right);
+void PostOrder(bNode* p_root){
+	if(p_root != NULL) {
+		PostOrder(p_root->left);
+		PostOrder(p_root->right);
+		printf("%p - %p %d %p\n",p_root,p_root->left,p_root->data,p_root->right);
 	}
 }
 
 // Breadth-first traversal
-void LevelOrder(bNode* root) {
-	if (root == NULL) return;
-	Queue queue = startQueue();
-	enqueue(root,&queue);
-	while (!isQueueEmpty(&queue)) {
-		bNode* current = queue.array[queue.front];
+void LevelOrder(bNode* p_root) {
+	if (p_root == NULL) return;
+	Queue* p_queue = startQueue();
+	int poppedValue;
+	enqueue(p_root,p_queue);
+	while (!isQueueEmpty(p_queue)) {
+		bNode* current = p_queue->array[p_queue->front];
 		printf("%p - %p %d %p \n",current,current->left,current->data,current->right);
-		if (current->left != NULL) enqueue(current->left,&queue);
-		if (current->right != NULL) enqueue(current->right,&queue);
-		dequeue(&queue);
+		if (current->left != NULL) enqueue(current->left,p_queue);
+		if (current->right != NULL) enqueue(current->right,p_queue);
+		dequeue(p_queue,&poppedValue);
 	}
+	endQueue(p_queue);
 }
 
 int main() {
+	
+	bNode* p_root = NULL;
+
 	return 0;
 }
