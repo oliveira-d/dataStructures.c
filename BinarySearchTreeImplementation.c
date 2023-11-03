@@ -227,17 +227,17 @@ int main() {
 	
 	bstNode* p_root = NULL;
 
-	insertTreeL(10,&p_root);
-	insertTreeL(0,&p_root);
-	insertTreeL(20,&p_root);
-	insertTreeL(-10,&p_root);
-	insertTreeL(30,&p_root);
-	insertTreeL(5,&p_root);
-	insertTreeL(-5,&p_root);
-	insertTreeL(15,&p_root);
-	insertTreeL(-15,&p_root);
-	insertTreeL(8,&p_root);
-	insertTreeL(-7,&p_root);
+	insertTree(10,&p_root);
+	insertTree(0,&p_root);
+	insertTree(20,&p_root);
+	insertTree(-10,&p_root);
+	insertTree(30,&p_root);
+	insertTree(5,&p_root);
+	insertTree(-5,&p_root);
+	insertTree(15,&p_root);
+	insertTree(-15,&p_root);
+	insertTree(8,&p_root);
+	insertTree(-7,&p_root);
 	//printf("%p",p_root);
 	//if (!treeHas(11,p_root)) printf("11 não encontrado\n");
 	LevelOrder(p_root);

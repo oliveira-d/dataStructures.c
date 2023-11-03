@@ -137,7 +137,7 @@ int treeHeight(bstNode* p_root) {
 
 bstNode* treeMin(bstNode* p_root) {
 	if (isTreeEmpty(p_root)) {
-		printf("Error: tree is empty!");
+		fprintf(stderr,"Error: tree is empty\n");
 		return NULL;
 	} else if (p_root->left == NULL) {
 		return p_root;
@@ -146,7 +146,7 @@ bstNode* treeMin(bstNode* p_root) {
 
 bstNode* treeMax(bstNode* p_root) {
 	if (isTreeEmpty(p_root)) {
-		printf("Error: tree is empty!");
+		fprintf(stderr,"Error: tree is empty\n");
 		return NULL;
 	} else if (p_root->right == NULL) {
 		return p_root;
@@ -176,26 +176,26 @@ bstNode* insertTreeR(int x, bstNode** p_p_root) {
 }
 
 // insertion with While Loop
-void insertTreeL(int x, bstNode** p_p_root) {
+void insertTree(int x, bstNode** p_p_root) {
 	
-	bstNode* var = (bstNode*)malloc(sizeof(bstNode));
-	var->left = NULL;
-	var->right = NULL;
-	var->data = x;
+	bstNode* newNode = (bstNode*)malloc(sizeof(bstNode));
+	newNode->left = NULL;
+	newNode->right = NULL;
+	newNode->data = x;
 	
 	if (*p_p_root == NULL) {
-		*p_p_root = var;
+		*p_p_root = newNode;
 		return;
 	}
 	
 	bstNode* temp = *p_p_root;
 	
-	while(temp->left != var && temp->right != var) {
+	while(temp->left != newNode && temp->right != newNode) {
 		
 		if (x <= temp->data && temp->left == NULL) {
-			temp->left = var;
+			temp->left = newNode;
 		} else if (x > temp->data && temp->right == NULL) {
-			temp->right = var;
+			temp->right = newNode;
 		} else if (x <= temp->data) temp = temp->left;
 		else temp = temp->right;
 	}
@@ -251,31 +251,13 @@ void PostOrder(bstNode* p_root){
 	}
 }
 
-// Breadth-first traversal
-/*
-void LevelOrder(bstNode* p_root) {
-	if (p_root == NULL) return;
-	Queue* p_queue = startQueue();
-	bstNode poppedValue;
-	enqueue(p_root,p_queue);
-	while (!isQueueEmpty(p_queue)) {
-		bstNode* current = p_queue->array[p_queue->front];
-		bstNode* poppedValue = NULL;
-        printf("%p - %p %d %p \n",current,current->left,current->data,current->right);
-		if (current->left != NULL) enqueue(current->left,p_queue);
-		if (current->right != NULL) enqueue(current->right,p_queue);
-		dequeue(p_queue);
-	}
-	//endQueue(p_queue);
-}
-*/
-
 void LevelOrder(bstNode* p_root) {
 	if (p_root == NULL) return;
 	Queue* p_queue = startQueue();
 	bstNode* poppedValue;
 	enqueue(p_root,p_queue);
-    while (!isQueueEmpty(p_queue)) {
+    printf("Address - LeftAddr Value RightAddr\n");
+	while (!isQueueEmpty(p_queue)) {
 		bstNode* current = (p_queue->front)->p_bstNode;
 		bstNode* poppedValue = NULL;
         printf("%p - %p %d %p \n",current,current->left,current->data,current->right);
@@ -283,6 +265,7 @@ void LevelOrder(bstNode* p_root) {
 		if (current->right != NULL) enqueue(current->right,p_queue);
 		dequeue(p_queue,&poppedValue);
 	}
+	free(p_queue);
 }
 
 #endif // BINARY_SEARCH_TREE_H
