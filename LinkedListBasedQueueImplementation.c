@@ -18,7 +18,13 @@ int main() {
 	printQueue(p_fila);
 	enqueue(5,p_fila);
 	printQueue(p_fila);
-
-	endQueue(p_fila);
+	if (dequeue(p_fila,&poppedValue)) printf("Popped value is %d \n",poppedValue);
+	if (dequeue(p_fila,&poppedValue)) printf("Popped value is %d \n",poppedValue);
+	if (dequeue(p_fila,&poppedValue)) printf("Popped value is %d \n",poppedValue);
+	if (dequeue(p_fila,&poppedValue)) printf("Popped value is %d \n",poppedValue);
+	if (dequeue(p_fila,&poppedValue)) printf("Popped value is %d \n",poppedValue);
+	if (dequeue(p_fila,&poppedValue)) printf("Popped value is %d \n",poppedValue);
+	if (dequeue(p_fila,&poppedValue)) printf("Popped value is %d \n",poppedValue);
+	//endQueue(p_fila);
 	return 0;
 }

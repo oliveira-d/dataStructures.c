@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "LinkedListBasedQueue.h"
+#include "BinarySearchTree.h"
 
 // Binary Search Tree implementation
-
+/*
 typedef struct bNode {
 	int data;
 	struct bNode* left;
@@ -27,7 +27,7 @@ int treeHeight(bNode* p_root) {
 }
 
 // start circular array based queue implementation (dependency for LevelOrder() function in BST implementation)
-/*
+
 #define n 20
 
 typedef struct Queue {
@@ -85,7 +85,7 @@ bNode* dequeue(Queue* queue) {
 	}
 	return pop;
 }
-*/
+
 // end of queue implementation
 
 // Search
@@ -209,7 +209,8 @@ void PostOrder(bNode* p_root){
 // Breadth-first traversal
 void LevelOrder(bNode* p_root) {
 	if (p_root == NULL) return;
-	Queue* p_queue = startQueue();
+	Queue queue = startQueue();
+	Queue* p_queue = &queue;
 	int poppedValue;
 	enqueue(p_root,p_queue);
 	while (!isQueueEmpty(p_queue)) {
@@ -217,14 +218,29 @@ void LevelOrder(bNode* p_root) {
 		printf("%p - %p %d %p \n",current,current->left,current->data,current->right);
 		if (current->left != NULL) enqueue(current->left,p_queue);
 		if (current->right != NULL) enqueue(current->right,p_queue);
-		dequeue(p_queue,&poppedValue);
+		dequeue(p_queue);
 	}
-	endQueue(p_queue);
+	//endQueue(p_queue);
 }
-
+*/
 int main() {
 	
-	bNode* p_root = NULL;
+	bstNode* p_root = NULL;
 
+	insertTreeL(10,&p_root);
+	insertTreeL(0,&p_root);
+	insertTreeL(20,&p_root);
+	insertTreeL(-10,&p_root);
+	insertTreeL(30,&p_root);
+	insertTreeL(5,&p_root);
+	insertTreeL(-5,&p_root);
+	insertTreeL(15,&p_root);
+	insertTreeL(-15,&p_root);
+	insertTreeL(8,&p_root);
+	insertTreeL(-7,&p_root);
+	//printf("%p",p_root);
+	//if (!treeHas(11,p_root)) printf("11 não encontrado\n");
+	LevelOrder(p_root);
+	//InOrder(p_root);
 	return 0;
 }
