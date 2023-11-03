@@ -60,21 +60,21 @@ int enqueue(bstNode* pt_bstNode, Queue* p_queue) {
 
 /* the dequeue() function takes the pointer to the queue and a pointer to an int variable to store the poppedValue.
 The function return 0 when fails (queue is empty), returns -1 when the popped element is the last one and returns 1 otherwise. */
-int dequeue(Queue* queue, bstNode** p_poppedValue) {
+int dequeue(Queue* p_queue, bstNode** p_poppedValue) {
 
-	if (queue->front == NULL) {
+	if (p_queue->front == NULL) {
         fprintf(stderr, "Queue is empty\n");
 		return 0;
     }
 
-	*p_poppedValue = (queue->front)->p_bstNode;
+	*p_poppedValue = (p_queue->front)->p_bstNode;
 	
-	queueNode* p_queueNode = queue->front;
-	queue->front = (queue->front)->next; //change the current front element of the queue
+	queueNode* p_queueNode = p_queue->front;
+	p_queue->front = (p_queue->front)->next; //change the current front element of the queue
 	free(p_queueNode); //free previous front node
 	
-	if (queue->front == NULL) {
-        queue->rear=NULL; // se o elemento tiver sido o último da lista, ajustar o queue->rear		
+	if (p_queue->front == NULL) {
+        p_queue->rear=NULL; // se o elemento tiver sido o último da lista, ajustar o queue->rear		
 		return -1;
 	} else {
 		return 1;
@@ -91,8 +91,8 @@ void endQueue(Queue* p_queue) {
 }
 
 // prints pointers to the bstNodes in the queue to the same line with spaces between items
-void printQueue(Queue* queue) {
-	queueNode* p_queueNode = queue->front;
+void printQueue(Queue* p_queue) {
+	queueNode* p_queueNode = p_queue->front;
 	while(p_queueNode != NULL) {
 		printf("%p ",p_queueNode->p_bstNode);
 		p_queueNode=p_queueNode->next;
@@ -101,8 +101,8 @@ void printQueue(Queue* queue) {
 }
 
 // prints values in the bstNodes in the queue to the same line with spaces between items
-void printBSTDataQueue(Queue* queue) {
-	queueNode* p_queueNode = queue->front;
+void printBSTDataQueue(Queue* p_queue) {
+	queueNode* p_queueNode = p_queue->front;
 	while(p_queueNode != NULL) {
 		printf("%d ",(p_queueNode->p_bstNode)->data);
 		p_queueNode=p_queueNode->next;
@@ -112,9 +112,6 @@ void printBSTDataQueue(Queue* queue) {
 // End of LinkedListQueue implementation
 
 bstNode* startBST() {
-    //bstNode* p_bstNode = (bstNode*)malloc(sizeof(bstNode));
-    //p_bstNode->left = NULL;
-    //p_bstNode->right = NULL;
     return NULL;
 }
 
@@ -188,22 +185,24 @@ void insertTree(int x, bstNode** p_p_root) {
 		return;
 	}
 	
-	bstNode* temp = *p_p_root;
+	bstNode* p_bstNode = *p_p_root;
 	
-	while(temp->left != newNode && temp->right != newNode) {
+	while(p_bstNode->left != newNode && p_bstNode->right != newNode) {
 		
-		if (x <= temp->data && temp->left == NULL) {
-			temp->left = newNode;
-		} else if (x > temp->data && temp->right == NULL) {
-			temp->right = newNode;
-		} else if (x <= temp->data) temp = temp->left;
-		else temp = temp->right;
+		if (x <= p_bstNode->data && p_bstNode->left == NULL) {
+			p_bstNode->left = newNode;
+		} else if (x > p_bstNode->data && p_bstNode->right == NULL) {
+			p_bstNode->right = newNode;
+		} else if (x <= p_bstNode->data) p_bstNode = p_bstNode->left;
+		else p_bstNode = p_bstNode->right;
 	}
 }
 
 bstNode* deleteTree(int x, bstNode** p_p_root) {
-	if (*p_p_root == NULL) return NULL;
-	else if (x < (*p_p_root)->data) (*p_p_root)->left = deleteTree(x,&(*p_p_root)->left);
+	if (*p_p_root == NULL) {
+		printf("Value %d not found in tree");
+		return NULL;
+	} else if (x < (*p_p_root)->data) (*p_p_root)->left = deleteTree(x,&(*p_p_root)->left);
 	else if (x > (*p_p_root)->data) (*p_p_root)->right = deleteTree(x,&(*p_p_root)->right);
 	else {
 		if ((*p_p_root)->left == NULL && (*p_p_root)->right == NULL) {
