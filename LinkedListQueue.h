@@ -77,7 +77,7 @@ int dequeue(Queue* queue, int* p_poppedValue) {
 then will free the pointer to the queue. */
 void endQueue(Queue* p_queue) {
 	int poppedValue;
-	while(dequeue(p_queue,&poppedValue) != -1);
+	while(dequeue(p_queue,&poppedValue) == 1); // changed from !=-1 to ==1 bc it results in endless loop if you call the function on an already empty queue
 	free(p_queue);
 }
 
