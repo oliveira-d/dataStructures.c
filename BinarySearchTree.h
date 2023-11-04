@@ -8,7 +8,7 @@ typedef struct bstNode {
 	struct bstNode* right;
 } bstNode;
 
-// LinkedListQueue implementation
+// START OF QUEUE IMPLEMENTATION
 
 typedef struct queueNode {
 	bstNode* p_bstNode;
@@ -109,7 +109,55 @@ void printBSTDataQueue(Queue* p_queue) {
 	}
 	printf("\n");
 }
-// End of LinkedListQueue implementation
+
+// END OF QUEUE IMPLEMENTATION
+
+// START OF STACK IMPLEMENTATION
+
+typedef struct stackNode {
+	bstNode* p_bstNode;
+	struct stackNode* next;
+} stackNode;
+
+stackNode* startStack() {
+    return NULL;
+}
+
+void stackPush(bstNode* p_bstNode,stackNode** p_p_top) {
+	stackNode* newNode = (stackNode*)malloc(sizeof(stackNode));
+	newNode->p_bstNode = p_bstNode;
+	newNode->next = *p_p_top;
+	*p_p_top = newNode;
+}
+
+int stackPop(stackNode** p_p_top,bstNode** p_p_poppedValue) {
+	if (*p_p_top == NULL) {
+        fprintf(stderr,"Can't pop element: stack is empty\n");
+        return 0;
+    }
+	stackNode* oldNode = *p_p_top;
+	*p_p_top = oldNode->next;
+    *p_p_poppedValue = oldNode->p_bstNode;
+	free(oldNode);
+    if(*p_p_top == NULL) return -1; //returns -1 if the poppedElement was the last one and now the stack is empty, returns 1 otherwise
+    return 1;
+}
+
+void printStack(stackNode* p_top) {
+	if (p_top == NULL){
+        fprintf(stderr,"Can't print stack: stack is empty\n"); 
+        return;
+    }
+    while(p_top != NULL) {
+		printf("%p ",p_top->p_bstNode);
+		p_top=p_top->next;
+	}
+	printf("\n");
+}
+
+// END OF STACK IMPLEMENTATION
+
+// START OF BINARY SEARCH TREE IMPLEMENTATION
 
 bstNode* startBST() {
     return NULL;
@@ -226,28 +274,107 @@ bstNode* deleteTree(int x, bstNode** p_p_root) {
 }
 
 // Depth-first traversal: 
-void PreOrder(bstNode* p_root){
+void PreOrderRecursive(bstNode* p_root){
 	if(p_root != NULL) {
 		printf("%p %p %d %p\n",p_root,p_root->left,p_root->data,p_root->right);
-		PreOrder(p_root->left);
-		PreOrder(p_root->right);
+		PreOrderRecursive(p_root->left);
+		PreOrderRecursive(p_root->right);
 	}
 }
 
-void InOrder(bstNode* p_root){
+// Preorder traversal using an iterative approach
+void PreOrder(struct bstNode* root) {
+    if (root == NULL) {
+        return;
+    }
+
+    struct stackNode* stack = NULL;
+    struct bstNode* current = root;
+
+    while (current != NULL || stack != NULL) {
+        while (current != NULL) {
+            printf("%p %p %d %p\n",current,current->left,current->data,current->right);
+
+            if (current->right != NULL) {
+                stackPush(current->right,&stack);
+            }
+
+            current = current->left;
+        }
+
+        if (stack != NULL) {
+			bstNode* poppedValue = NULL;
+            stackPop(&stack,&poppedValue);
+			current = poppedValue;
+        }
+    }
+}
+
+
+void InOrderRecursive(bstNode* p_root){
 	if(p_root != NULL) {
-		InOrder(p_root->left);
+		InOrderRecursive(p_root->left);
 		printf("%p - %p %d %p\n",p_root,p_root->left,p_root->data,p_root->right);
-		InOrder(p_root->right);
+		InOrderRecursive(p_root->right);
 	}
 }
 
-void PostOrder(bstNode* p_root){
+void InOrder(struct bstNode* root) {
+    if (root == NULL) {
+        return;
+    }
+
+    stackNode* stack = NULL;
+    bstNode* current = root;
+
+    while (current != NULL || stack != NULL) {
+        while (current != NULL) {
+            stackPush(current,&stack);
+            current = current->left;
+        }
+
+        stackPop(&stack,&current);
+        printf("%p - %p %d %p\n", current, current->left, current->data, current->right);
+        current = current->right;
+    }
+}
+
+void PostOrderRecursive(bstNode* p_root){
 	if(p_root != NULL) {
-		PostOrder(p_root->left);
-		PostOrder(p_root->right);
+		PostOrderRecursive(p_root->left);
+		PostOrderRecursive(p_root->right);
 		printf("%p - %p %d %p\n",p_root,p_root->left,p_root->data,p_root->right);
 	}
+}
+
+void PostOrder(struct bstNode* root) {
+    if (root == NULL) {
+        return;
+    }
+
+    struct stackNode* stack1 = NULL;
+    struct stackNode* stack2 = NULL;
+
+    stackPush(root,&stack1);
+
+    bstNode* current=NULL;
+	while (stack1 != NULL) {
+        stackPop(&stack1,&current);
+        stackPush(current,&stack2);
+
+        if (current->left != NULL) {
+            stackPush(current->left,&stack1);
+        }
+
+        if (current->right != NULL) {
+            stackPush(current->right,&stack1);
+        }
+    }
+
+	while (stack2 != NULL) {
+		stackPop(&stack2,&current);
+        printf("%p - %p %d %p\n", current, current->left, current->data, current->right);
+    }
 }
 
 void LevelOrder(bstNode* p_root) {

@@ -30,14 +30,14 @@ int stackPop(stackNode** p_p_top,int* p_poppedValue) {
     return 1;
 }
 
-void printStack(stackNode* top) {
-	if (top == NULL){
+void printStack(stackNode* p_top) {
+	if (p_top == NULL){
         fprintf(stderr,"Can't print stack: stack is empty\n"); 
         return;
     }
-    while(top != NULL) {
-		printf("%d ",top->data);
-		top=top->next;
+    while(p_top != NULL) {
+		printf("%d ",p_top->data);
+		p_top=p_top->next;
 	}
 	printf("\n");
 }

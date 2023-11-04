@@ -240,7 +240,10 @@ int main() {
 	insertTree(-7,&p_root);
 	//printf("%p",p_root);
 	//if (!treeHas(11,p_root)) printf("11 não encontrado\n");
-	LevelOrder(p_root);
+	//LevelOrder(p_root);
 	//InOrder(p_root);
+	InOrderRecursive(p_root);
+	printf("\n");
+	InOrder(p_root);
 	return 0;
 }
